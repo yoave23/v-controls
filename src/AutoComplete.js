@@ -10,6 +10,7 @@ class AutoComplete extends Component {
         return;
       }
       const parentClassList = e.target.parentElement.classList;
+
       const test1 = parentClassList.contains("auto-complete-items-container");
       const test2 = parentClassList.contains("auto-complete-wrapper");
       if (!test1 && !test2) {
