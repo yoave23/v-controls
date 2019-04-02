@@ -1,26 +1,20 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import "./TextInput.css";
 
-class TextInput extends Component {
+class TextInput extends PureComponent {
+  inputRef = this.props.innerRef || React.createRef();
+
   state = {
     blurred: false,
     validationMessage: ""
   };
 
+  componentDidMount() {
+    this.validate();
+  }
+
   getId = () => {
     return this.props.id || this.props.name;
-  };
-
-  getLabel = () => {
-    const labelClassName = this.props.labelClassName || "text-input-label";
-    if (this.props.label) {
-      return (
-        <label htmlFor={this.getId()} className={labelClassName}>
-          {this.props.label}
-        </label>
-      );
-    }
-    return null;
   };
 
   onBlur = e => {
@@ -28,9 +22,12 @@ class TextInput extends Component {
     if (this.props.onBlur) {
       this.props.onBlur(e);
     }
-    this.setState({ blurred: true }, () => {
-      this.validate();
-    });
+
+    if (!this.state.blurred) {
+      this.setState({ blurred: true }, () => {
+        this.validate();
+      });
+    }
   };
 
   onChange = e => {
@@ -58,23 +55,17 @@ class TextInput extends Component {
     }
 
     this.validationMessage = validationMessage;
-    console.log(
-      "calling onValidityChanged",
-      this.props.name,
-      validationMessage
-    );
-    if (this.state.blurred || this.props.submitted)
-      this.props.onValidityChanged(this.props.name, validationMessage);
+    console.log("validationMessage", validationMessage);
+    this.setState({ validationMessage });
+    this.props.onValidityChanged(this.props.name, validationMessage);
   };
 
   getValidationMessage = () => {
-    if (this.state.blurred) {
-      return this.state.validationMessage;
-    }
-    return null;
+    return this.state.blurred || this.props.submitted
+      ? this.state.validationMessage
+      : null;
   };
 
-  inputRef = this.props.innerRef || React.createRef();
   render() {
     const {
       submitted,
@@ -88,7 +79,6 @@ class TextInput extends Component {
 
     return (
       <React.Fragment>
-        {this.getLabel()}
         <input
           ref={this.inputRef}
           id={this.getId()}
@@ -96,6 +86,7 @@ class TextInput extends Component {
           onChange={this.onChange}
           {...thinProps}
         />
+        <div className="validation-message">{this.getValidationMessage()}</div>
       </React.Fragment>
     );
   }

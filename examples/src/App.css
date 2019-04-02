@@ -1,17 +1,24 @@
-.example-container{
-    border: 1px solid gray;
-    border-radius: 3px;
-    padding: 7px;
-    width: 40%;
-    margin: 0 auto;
+/* .example-container {
+  border: 1px solid gray;
+  border-radius: 3px;
+  padding: 7px;
+  width: 40%;
+  margin: 0 auto;
 }
-.control-group{
-    margin: 7px;
+.control-group {
+  margin: 7px;
 }
 .control-group label {
-    display: block;
+  display: block;
 }
 
-.error-msg{
-    color: red;
+.error-msg {
+  color: red;
+} */
+
+.demo {
+  margin: 10px;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 7px;
 }
