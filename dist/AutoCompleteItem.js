@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-exports.formHoc = formHoc;
-
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
+
+require("./AutoCompleteItem.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20,23 +20,43 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function formHoc(WrappedForm) {
-    return function (_Component) {
-        _inherits(FormHoc, _Component);
+var AutoCompleteItem = function (_Component) {
+  _inherits(AutoCompleteItem, _Component);
 
-        function FormHoc(props) {
-            _classCallCheck(this, FormHoc);
+  function AutoCompleteItem(props) {
+    _classCallCheck(this, AutoCompleteItem);
 
-            return _possibleConstructorReturn(this, (FormHoc.__proto__ || Object.getPrototypeOf(FormHoc)).call(this, props));
-        }
+    var _this = _possibleConstructorReturn(this, (AutoCompleteItem.__proto__ || Object.getPrototypeOf(AutoCompleteItem)).call(this, props));
 
-        _createClass(FormHoc, [{
-            key: 'render',
-            value: function render() {
-                return _react2.default.createElement(WrappedForm, this.props);
-            }
-        }]);
+    _this.getClassName = function () {
+      var className = "autocomplete-item";
+      if (_this.props.index === _this.props.currentFocus) {
+        className += " selected";
+      }
+      return className;
+    };
 
-        return FormHoc;
-    }(_react.Component);
-}
+    _this.onClick = function (e) {
+      console.log("item '" + _this.props.value + "' was clicked");
+      _this.props.onItemClick(_this.props.index);
+    };
+
+    _this.state = {};
+    return _this;
+  }
+
+  _createClass(AutoCompleteItem, [{
+    key: "render",
+    value: function render() {
+      return _react2.default.createElement(
+        "div",
+        { className: this.getClassName(), onClick: this.onClick },
+        this.props.value
+      );
+    }
+  }]);
+
+  return AutoCompleteItem;
+}(_react.Component);
+
+exports.default = AutoCompleteItem;

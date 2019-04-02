@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { TextInput, AutoComplete } from "../../src/index";
-import TestF from "../../src/TestF";
 
 export default class App extends Component {
   testTextInputRef = React.createRef();
@@ -61,7 +60,6 @@ export default class App extends Component {
         <br />
         <hr />
         {this.state.toggleDisplay ? <AutoComplete /> : null}
-        <p>lorem ipsum</p>
       </div>
     );
   }

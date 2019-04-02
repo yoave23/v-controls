@@ -12,6 +12,10 @@ var _react2 = _interopRequireDefault(_react);
 
 require("./AutoComplete.css");
 
+var _AutoCompleteItem = require("./AutoCompleteItem");
+
+var _AutoCompleteItem2 = _interopRequireDefault(_AutoCompleteItem);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26,56 +30,137 @@ var AutoComplete = function (_Component) {
   _inherits(AutoComplete, _Component);
 
   function AutoComplete() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
     _classCallCheck(this, AutoComplete);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this = _possibleConstructorReturn(this, (AutoComplete.__proto__ || Object.getPrototypeOf(AutoComplete)).call(this));
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = AutoComplete.__proto__ || Object.getPrototypeOf(AutoComplete)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+    _this.state = {
       currentFocus: -1,
       searchTerm: "",
       matches: []
-    }, _this.onAcChange = function (e) {
+    };
+
+    _this.onAcChange = function (e) {
       var value = e.target.value;
       var matches = [];
       if (value.length > 0) {
         matches = countries.filter(function (c) {
-          return c.indexOf(value) > -1;
+          return c.toUpperCase().startsWith(value.toUpperCase());
         });
       } else {
         matches = [];
       }
       _this.setState({ searchTerm: value, matches: matches });
-    }, _this.onKeyDown = function (e) {
+    };
+
+    _this.onKeyDown = function (e) {
+      //40 down
+      //38 up
+      //13 enter
+      //27 esc
       console.log("onKeyDown", e.keyCode);
-    }, _this.getItem = function (val) {
-      return _react2.default.createElement(
-        "div",
-        { key: val },
-        val
-      );
-    }, _this.getItems = function () {
-      return _this.state.matches.map(function (item) {
-        return _this.getItem(item);
+      var key = e.keyCode;
+      var matchesLength = _this.state.matches.length;
+      var currentFocus = _this.state.currentFocus;
+
+      switch (key) {
+        case 40:
+          if (currentFocus < matchesLength - 1 && matchesLength > 0) {
+            _this.setState({ currentFocus: currentFocus + 1 });
+          }
+          e.preventDefault();
+          break;
+        case 38:
+          if (currentFocus > -1 && matchesLength > 0) {
+            _this.setState({ currentFocus: currentFocus - 1 });
+          }
+          e.preventDefault();
+          break;
+        case 13:
+          if (currentFocus > -1) {
+            var selectedValue = _this.state.matches[currentFocus];
+            _this.setState({
+              searchTerm: selectedValue,
+              matches: [],
+              currentFocus: -1
+            });
+          }
+          break;
+        case 27:
+          _this.setState({ matches: [] });
+          break;
+        default:
+          break;
+      }
+    };
+
+    _this.onItemClick = function (itemIndex) {
+      var clicked = _this.state.matches[itemIndex];
+      _this.setState({
+        searchTerm: clicked,
+        matches: [],
+        currentFocus: -1
       });
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    };
+
+    _this.getItem = function (val, index) {
+      return _react2.default.createElement(_AutoCompleteItem2.default, {
+        key: val,
+        index: index,
+        currentFocus: _this.state.currentFocus,
+        value: val,
+        onItemClick: _this.onItemClick
+      });
+    };
+
+    _this.getItems = function () {
+      return _this.state.matches.map(function (item, index) {
+        return _this.getItem(item, index);
+      });
+    };
+
+    _this.clickEvent = document.addEventListener("click", function (e) {
+      if (!e.target.parentElement) {
+        return;
+      }
+      var parentClassList = e.target.parentElement.classList;
+      var test1 = parentClassList.contains("auto-complete-items-container");
+      var test2 = parentClassList.contains("auto-complete-wrapper");
+      if (!test1 && !test2) {
+        _this.setState({ matches: [] });
+      }
+    });
+    return _this;
   }
 
   _createClass(AutoComplete, [{
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      document.removeEventListener("click", this.clickEvent);
+    }
+  }, {
     key: "render",
     value: function render() {
       return _react2.default.createElement(
         "div",
         { className: "auto-complete-wrapper" },
+        _react2.default.createElement(
+          "div",
+          null,
+          "currentFocus: ",
+          this.state.currentFocus
+        ),
+        _react2.default.createElement(
+          "div",
+          null,
+          "matches.length: ",
+          this.state.matches.length
+        ),
         _react2.default.createElement("input", {
           type: "text",
           onChange: this.onAcChange,
-          onKeyDown: this.onKeyDown
+          onKeyDown: this.onKeyDown,
+          value: this.state.searchTerm
         }),
         _react2.default.createElement(
           "div",
