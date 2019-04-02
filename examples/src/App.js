@@ -6,7 +6,8 @@ export default class App extends Component {
   testTextInputRef = React.createRef();
   state = {
     testTextInput: "",
-    validityState: {}
+    validityState: {},
+    toggleDisplay: true
   };
 
   onChange = e => {
@@ -22,8 +23,8 @@ export default class App extends Component {
   };
 
   testClick = () => {
-    debugger;
-    console.log(this.testTextInputRef.current.getValidationMessage);
+    this.setState({ toggleDisplay: !this.state.toggleDisplay });
+    //console.log(this.testTextInputRef.current.getValidationMessage);
   };
 
   mustBeEven = (val, name) => {
@@ -59,7 +60,8 @@ export default class App extends Component {
         </div>
         <br />
         <hr />
-        <AutoComplete />
+        {this.state.toggleDisplay ? <AutoComplete /> : null}
+        <p>lorem ipsum</p>
       </div>
     );
   }
