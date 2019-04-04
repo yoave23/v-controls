@@ -54,6 +54,7 @@ class AutoComplete extends Component {
     //38 up
     //13 enter
     //27 esc
+    //9 tab
     console.log("onKeyDown", e.keyCode);
     const key = e.keyCode;
     const matchesLength = this.state.matches.length;
@@ -82,6 +83,7 @@ class AutoComplete extends Component {
           });
         }
         break;
+      case 9:
       case 27:
         this.setState({ matches: [] });
         break;
@@ -114,6 +116,8 @@ class AutoComplete extends Component {
   getItems = () => {
     return this.state.matches.map((item, index) => this.getItem(item, index));
   };
+
+  onBlur = e => {};
 
   render() {
     return (
