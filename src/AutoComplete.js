@@ -29,19 +29,19 @@ class AutoComplete extends Component {
     document.removeEventListener("click", this.clickEvent);
   }
 
-  onAcChange = e => {
+  onChange = async e => {
     const value = e.target.value;
-    const matches = this.findItems(value);
+    const matches = await this.filterItems(value);
     this.setState({ searchTerm: value, matches });
   };
 
-  findItems = value => {
+  filterItems = async value => {
     if (!value) {
       return [];
     }
 
-    if (this.props.findItems) {
-      return this.props.findItems(value, this.props.items);
+    if (this.props.filterItems) {
+      return await this.props.filterItems(value, this.props.items);
     }
 
     return this.props.items.filter(c =>
@@ -118,11 +118,9 @@ class AutoComplete extends Component {
   render() {
     return (
       <div className="auto-complete-wrapper">
-        <div>currentFocus: {this.state.currentFocus}</div>
-        <div>matches.length: {this.state.matches.length}</div>
         <input
           type="text"
-          onChange={this.onAcChange}
+          onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           value={this.state.searchTerm}
         />

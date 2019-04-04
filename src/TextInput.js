@@ -41,7 +41,12 @@ class TextInput extends PureComponent {
 
   validate = () => {
     let validationMessage = "";
-    const innerRef = this.props.innerRef.current;
+    let innerRef = null; // = this.props.innerRef.current || this.inputRef.current;
+    if (this.props.innerRef) {
+      innerRef = this.props.innerRef.current;
+    } else {
+      innerRef = this.inputRef.current;
+    }
     if (!innerRef.validity.valid) {
       if (innerRef.validity.valueMissing) {
         validationMessage = "this field is required";
@@ -80,7 +85,7 @@ class TextInput extends PureComponent {
     return (
       <React.Fragment>
         <input
-          ref={this.inputRef}
+          ref={this.props.innerRef || this.inputRef}
           id={this.getId()}
           onBlur={this.onBlur}
           onChange={this.onChange}

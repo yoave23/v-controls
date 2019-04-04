@@ -1,3 +1,4 @@
 import TextInput from "./TextInput";
 import AutoComplete from "./AutoComplete";
-export { TextInput, AutoComplete };
+import formHoc from "./Form/formHoc";
+export { TextInput, AutoComplete, formHoc };

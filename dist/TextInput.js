@@ -24,8 +24,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var TextInput = function (_Component) {
-  _inherits(TextInput, _Component);
+var TextInput = function (_PureComponent) {
+  _inherits(TextInput, _PureComponent);
 
   function TextInput() {
     var _ref;
@@ -38,29 +38,22 @@ var TextInput = function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TextInput.__proto__ || Object.getPrototypeOf(TextInput)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TextInput.__proto__ || Object.getPrototypeOf(TextInput)).call.apply(_ref, [this].concat(args))), _this), _this.inputRef = _this.props.innerRef || _react2.default.createRef(), _this.state = {
       blurred: false,
       validationMessage: ""
     }, _this.getId = function () {
       return _this.props.id || _this.props.name;
-    }, _this.getLabel = function () {
-      var labelClassName = _this.props.labelClassName || "text-input-label";
-      if (_this.props.label) {
-        return _react2.default.createElement(
-          "label",
-          { htmlFor: _this.getId(), className: labelClassName },
-          _this.props.label
-        );
-      }
-      return null;
     }, _this.onBlur = function (e) {
       e.persist();
       if (_this.props.onBlur) {
         _this.props.onBlur(e);
       }
-      _this.setState({ blurred: true }, function () {
-        _this.validate();
-      });
+
+      if (!_this.state.blurred) {
+        _this.setState({ blurred: true }, function () {
+          _this.validate();
+        });
+      }
     }, _this.onChange = function (e) {
       e.persist();
       if (_this.props.onChange) {
@@ -70,7 +63,12 @@ var TextInput = function (_Component) {
       _this.validate();
     }, _this.validate = function () {
       var validationMessage = "";
-      var innerRef = _this.props.innerRef.current;
+      var innerRef = null; // = this.props.innerRef.current || this.inputRef.current;
+      if (_this.props.innerRef) {
+        innerRef = _this.props.innerRef.current;
+      } else {
+        innerRef = _this.inputRef.current;
+      }
       if (!innerRef.validity.valid) {
         if (innerRef.validity.valueMissing) {
           validationMessage = "this field is required";
@@ -84,17 +82,20 @@ var TextInput = function (_Component) {
       }
 
       _this.validationMessage = validationMessage;
-      console.log("calling onValidityChanged", _this.props.name, validationMessage);
-      if (_this.state.blurred || _this.props.submitted) _this.props.onValidityChanged(_this.props.name, validationMessage);
+      console.log("validationMessage", validationMessage);
+      _this.setState({ validationMessage: validationMessage });
+      _this.props.onValidityChanged(_this.props.name, validationMessage);
     }, _this.getValidationMessage = function () {
-      if (_this.state.blurred) {
-        return _this.state.validationMessage;
-      }
-      return null;
-    }, _this.inputRef = _this.props.innerRef || _react2.default.createRef(), _temp), _possibleConstructorReturn(_this, _ret);
+      return _this.state.blurred || _this.props.submitted ? _this.state.validationMessage : null;
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(TextInput, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.validate();
+    }
+  }, {
     key: "render",
     value: function render() {
       var _props = this.props,
@@ -109,19 +110,23 @@ var TextInput = function (_Component) {
       return _react2.default.createElement(
         _react2.default.Fragment,
         null,
-        this.getLabel(),
         _react2.default.createElement("input", _extends({
-          ref: this.inputRef,
+          ref: this.props.innerRef || this.inputRef,
           id: this.getId(),
           onBlur: this.onBlur,
           onChange: this.onChange
-        }, thinProps))
+        }, thinProps)),
+        _react2.default.createElement(
+          "div",
+          { className: "validation-message" },
+          this.getValidationMessage()
+        )
       );
     }
   }]);
 
   return TextInput;
-}(_react.Component);
+}(_react.PureComponent);
 
 exports.default = _react2.default.forwardRef(function (props, ref) {
   return _react2.default.createElement(TextInput, _extends({ innerRef: ref }, props));

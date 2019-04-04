@@ -251,8 +251,12 @@ class App extends Component {
     return val.length % 2 === 0 ? null : `value must be even in field ${name}`;
   };
 
-  acItemsFinder = (value, items) => {
+  filterItems = (value, items) => {
     return items.filter(v => v.toUpperCase().endsWith(value.toUpperCase()));
+  };
+
+  onButtonClick = () => {
+    this.props.setSubmitted();
   };
 
   render() {
@@ -267,7 +271,8 @@ class App extends Component {
             onChange={this.onChange}
             required
             onValidityChanged={this.props.onValidityChanged}
-            ref={this.testTextInputRef}
+            // ref={this.testTextInputRef}
+            submitted={this.props.submitted}
             customValidations={[this.mustBeEven]}
           />
         </div>
@@ -275,13 +280,13 @@ class App extends Component {
           <AutoComplete items={countries} />
         </div>
         <div className="demo">
-          <AutoComplete items={itemsTest} findItems={this.acItemsFinder} />
+          <AutoComplete items={itemsTest} filterItems={this.filterItems} />
         </div>
         <div>
           validation message:
           {JSON.stringify(this.props.validationState)}
         </div>
-        <button disabled={!this.props.isFormValid()}>submit</button>
+        <button onClick={this.onButtonClick}>submit</button>
       </div>
     );
   }

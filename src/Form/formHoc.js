@@ -7,6 +7,10 @@ const formHoc = WrappedComponent => {
       submitted: false
     };
 
+    setSubmitted = () => {
+      this.setState({ submitted: true });
+    };
+
     onValidityChanged = (name, validationMessage) => {
       console.log("onValidityChanged called", name, validationMessage);
       let temp = { ...this.state.validationState };
@@ -27,9 +31,11 @@ const formHoc = WrappedComponent => {
       return (
         <WrappedComponent
           {...this.props}
+          submitted={this.state.submitted}
           isFormValid={this.isFormValid}
           onValidityChanged={this.onValidityChanged}
           validationState={this.state.validationState}
+          setSubmitted={this.setSubmitted}
         />
       );
     }

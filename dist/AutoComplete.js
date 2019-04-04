@@ -18,18 +18,20 @@ var _AutoCompleteItem2 = _interopRequireDefault(_AutoCompleteItem);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antigua & Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia & Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central Arfrican Republic", "Chad", "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cuba", "Curacao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauro", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre & Miquelon", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "St Kitts & Nevis", "St Lucia", "St Vincent", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad & Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks & Caicos", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];
-
 var AutoComplete = function (_Component) {
   _inherits(AutoComplete, _Component);
 
   function AutoComplete() {
+    var _this2 = this;
+
     _classCallCheck(this, AutoComplete);
 
     var _this = _possibleConstructorReturn(this, (AutoComplete.__proto__ || Object.getPrototypeOf(AutoComplete)).call(this));
@@ -40,18 +42,77 @@ var AutoComplete = function (_Component) {
       matches: []
     };
 
-    _this.onAcChange = function (e) {
-      var value = e.target.value;
-      var matches = [];
-      if (value.length > 0) {
-        matches = countries.filter(function (c) {
-          return c.toUpperCase().startsWith(value.toUpperCase());
-        });
-      } else {
-        matches = [];
-      }
-      _this.setState({ searchTerm: value, matches: matches });
-    };
+    _this.onChange = function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+        var value, matches;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                value = e.target.value;
+                _context.next = 3;
+                return _this.filterItems(value);
+
+              case 3:
+                matches = _context.sent;
+
+                _this.setState({ searchTerm: value, matches: matches });
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, _this2);
+      }));
+
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }();
+
+    _this.filterItems = function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(value) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (value) {
+                  _context2.next = 2;
+                  break;
+                }
+
+                return _context2.abrupt("return", []);
+
+              case 2:
+                if (!_this.props.filterItems) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                _context2.next = 5;
+                return _this.props.filterItems(value, _this.props.items);
+
+              case 5:
+                return _context2.abrupt("return", _context2.sent);
+
+              case 6:
+                return _context2.abrupt("return", _this.props.items.filter(function (c) {
+                  return c.toUpperCase().startsWith(value.toUpperCase());
+                }));
+
+              case 7:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, _this2);
+      }));
+
+      return function (_x2) {
+        return _ref2.apply(this, arguments);
+      };
+    }();
 
     _this.onKeyDown = function (e) {
       //40 down
@@ -124,6 +185,7 @@ var AutoComplete = function (_Component) {
         return;
       }
       var parentClassList = e.target.parentElement.classList;
+
       var test1 = parentClassList.contains("auto-complete-items-container");
       var test2 = parentClassList.contains("auto-complete-wrapper");
       if (!test1 && !test2) {
@@ -144,30 +206,15 @@ var AutoComplete = function (_Component) {
       return _react2.default.createElement(
         "div",
         { className: "auto-complete-wrapper" },
-        _react2.default.createElement(
-          "div",
-          null,
-          "currentFocus: ",
-          this.state.currentFocus
-        ),
-        _react2.default.createElement(
-          "div",
-          null,
-          "matches.length: ",
-          this.state.matches.length
-        ),
         _react2.default.createElement("input", {
           type: "text",
-          onChange: this.onAcChange,
+          onChange: this.onChange,
           onKeyDown: this.onKeyDown,
           value: this.state.searchTerm
         }),
         _react2.default.createElement(
           "div",
-          {
-            className: "auto-complete-items-container",
-            id: (this.props.id || this.props.name) + "auto-complete-items-container"
-          },
+          { className: "auto-complete-items-container" },
           this.getItems()
         )
       );
