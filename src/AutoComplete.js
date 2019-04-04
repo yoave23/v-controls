@@ -30,9 +30,12 @@ class AutoComplete extends Component {
   }
 
   onChange = async e => {
+    e.persist();
     const value = e.target.value;
     const matches = await this.filterItems(value);
-    this.setState({ searchTerm: value, matches });
+    this.setState({ searchTerm: value, matches }, () => {
+      this.props.onChange(e);
+    });
   };
 
   filterItems = async value => {

@@ -119,6 +119,7 @@ var AutoComplete = function (_Component) {
       //38 up
       //13 enter
       //27 esc
+      //9 tab
       console.log("onKeyDown", e.keyCode);
       var key = e.keyCode;
       var matchesLength = _this.state.matches.length;
@@ -147,6 +148,7 @@ var AutoComplete = function (_Component) {
             });
           }
           break;
+        case 9:
         case 27:
           _this.setState({ matches: [] });
           break;
@@ -179,6 +181,8 @@ var AutoComplete = function (_Component) {
         return _this.getItem(item, index);
       });
     };
+
+    _this.onBlur = function (e) {};
 
     _this.clickEvent = document.addEventListener("click", function (e) {
       if (!e.target.parentElement) {
