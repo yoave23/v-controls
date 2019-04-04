@@ -53,6 +53,7 @@ class AutoComplete extends Component {
   };
 
   onKeyDown = e => {
+    e.persist();
     //40 down
     //38 up
     //13 enter
@@ -93,6 +94,10 @@ class AutoComplete extends Component {
       default:
         break;
     }
+
+    if (this.props.onKeyDown) {
+      this.props.onKeyDown(e);
+    }
   };
 
   onItemClick = itemIndex => {
@@ -126,12 +131,10 @@ class AutoComplete extends Component {
     return (
       <div className="auto-complete-wrapper">
         <input
-          name={this.props.name}
           type="text"
-          onChange={this.onChange}
           onKeyDown={this.onKeyDown}
-          value={this.state.searchTerm}
           className="ac-input"
+          {...this.props}
         />
         <div className="auto-complete-items-container">{this.getItems()}</div>
       </div>

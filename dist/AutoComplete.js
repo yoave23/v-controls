@@ -214,6 +214,7 @@ var AutoComplete = function (_Component) {
         "div",
         { className: "auto-complete-wrapper" },
         _react2.default.createElement("input", {
+          name: this.props.name,
           type: "text",
           onChange: this.onChange,
           onKeyDown: this.onKeyDown,
