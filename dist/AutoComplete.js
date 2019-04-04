@@ -210,7 +210,8 @@ var AutoComplete = function (_Component) {
           type: "text",
           onChange: this.onChange,
           onKeyDown: this.onKeyDown,
-          value: this.state.searchTerm
+          value: this.state.searchTerm,
+          className: "ac-input"
         }),
         _react2.default.createElement(
           "div",

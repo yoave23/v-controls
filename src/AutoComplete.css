@@ -1,10 +1,15 @@
 .auto-complete-wrapper * {
   box-sizing: border-box;
 }
+
 .auto-complete-wrapper {
   position: relative;
-  display: inline-block;
 }
+
+.auto-complete-wrapper .ac-input {
+  width: 100%;
+}
+
 .auto-complete-items-container {
   border: 0.5px solid #d4d4d4;
   border-top: none;

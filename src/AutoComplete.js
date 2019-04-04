@@ -123,6 +123,7 @@ class AutoComplete extends Component {
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           value={this.state.searchTerm}
+          className="ac-input"
         />
         <div className="auto-complete-items-container">{this.getItems()}</div>
       </div>
