@@ -49,16 +49,19 @@ var AutoComplete = function (_Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                e.persist();
                 value = e.target.value;
-                _context.next = 3;
+                _context.next = 4;
                 return _this.filterItems(value);
 
-              case 3:
+              case 4:
                 matches = _context.sent;
 
-                _this.setState({ searchTerm: value, matches: matches });
+                _this.setState({ searchTerm: value, matches: matches }, function () {
+                  _this.props.onChange(e);
+                });
 
-              case 5:
+              case 6:
               case "end":
                 return _context.stop();
             }

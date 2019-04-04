@@ -126,6 +126,7 @@ class AutoComplete extends Component {
     return (
       <div className="auto-complete-wrapper">
         <input
+          name={this.props.name}
           type="text"
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
