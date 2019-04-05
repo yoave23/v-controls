@@ -79,6 +79,7 @@ class TextInput extends PureComponent {
       onBlur,
       onChange,
       innerRef,
+      filterItems,
       ...thinProps
     } = this.props;
 

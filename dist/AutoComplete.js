@@ -20,6 +20,8 @@ var _AutoCompleteItem2 = _interopRequireDefault(_AutoCompleteItem);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -217,6 +219,10 @@ var AutoComplete = function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var _props = this.props,
+          filterItems = _props.filterItems,
+          thinProps = _objectWithoutProperties(_props, ["filterItems"]);
+
       return _react2.default.createElement(
         "div",
         { className: "auto-complete-wrapper" },
@@ -224,7 +230,7 @@ var AutoComplete = function (_Component) {
           type: "text",
           onKeyDown: this.onKeyDown,
           className: "ac-input"
-        }, this.props)),
+        }, thinProps)),
         _react2.default.createElement(
           "div",
           { className: "auto-complete-items-container" },
