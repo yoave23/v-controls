@@ -128,13 +128,14 @@ class AutoComplete extends Component {
   onBlur = e => {};
 
   render() {
+    const { filterItems, ...thinProps } = this.props;
     return (
       <div className="auto-complete-wrapper">
         <input
           type="text"
           onKeyDown={this.onKeyDown}
           className="ac-input"
-          {...this.props}
+          {...thinProps}
         />
         <div className="auto-complete-items-container">{this.getItems()}</div>
       </div>
