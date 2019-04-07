@@ -234,12 +234,17 @@ class App extends Component {
   testTextInputRef = React.createRef();
 
   state = {
-    testTextInput: ""
+    testTextInput: "",
+    selectedCountry: ""
   };
 
   onChange = e => {
     const name = e.target.name;
     const value = e.target.value;
+    console.group("in App onChange");
+    console.log({ name });
+    console.log({ value });
+    console.groupEnd();
     this.setState({ [name]: value });
   };
 
@@ -260,6 +265,7 @@ class App extends Component {
   };
 
   render() {
+    console.log(<TextInput />);
     return (
       <div>
         <h2>Validatable controls examples</h2>
@@ -271,17 +277,26 @@ class App extends Component {
             onChange={this.onChange}
             required
             onValidityChanged={this.props.onValidityChanged}
-            // ref={this.testTextInputRef}
+            ref={this.testTextInputRef}
             submitted={this.props.submitted}
             customValidations={[this.mustBeEven]}
           />
         </div>
         <div className="demo">
-          <AutoComplete items={countries} />
+          <AutoComplete
+            required
+            name="selectedCountry"
+            label="selected country"
+            value={this.state.selectedCountry}
+            onValidityChanged={this.props.onValidityChanged}
+            submitted={this.props.submitted}
+            onChange={this.onChange}
+            items={countries}
+          />
         </div>
-        <div className="demo">
+        {/* <div className="demo">
           <AutoComplete items={itemsTest} filterItems={this.filterItems} />
-        </div>
+        </div> */}
         <div>
           validation message:
           {JSON.stringify(this.props.validationState)}

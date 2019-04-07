@@ -105,7 +105,8 @@ var TextInput = function (_PureComponent) {
           onBlur = _props.onBlur,
           onChange = _props.onChange,
           innerRef = _props.innerRef,
-          thinProps = _objectWithoutProperties(_props, ["submitted", "customValidations", "onValidityChanged", "onBlur", "onChange", "innerRef"]);
+          filterItems = _props.filterItems,
+          thinProps = _objectWithoutProperties(_props, ["submitted", "customValidations", "onValidityChanged", "onBlur", "onChange", "innerRef", "filterItems"]);
 
       return _react2.default.createElement(
         _react2.default.Fragment,

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./AutoComplete.css";
 import AutoCompleteItem from "./AutoCompleteItem";
+import TextInput from "./TextInput";
 
 class AutoComplete extends Component {
   constructor() {
@@ -31,11 +32,13 @@ class AutoComplete extends Component {
 
   onChange = async e => {
     e.persist();
+    this.props.onChange(e);
     const value = e.target.value;
     const matches = await this.filterItems(value);
-    this.setState({ searchTerm: value, matches }, () => {
-      this.props.onChange(e);
-    });
+    // console.group("in autoComplete onChange");
+    // console.log({ value });
+    // console.groupEnd();
+    this.setState({ searchTerm: value, matches }, () => {});
   };
 
   filterItems = async value => {
@@ -107,6 +110,7 @@ class AutoComplete extends Component {
       matches: [],
       currentFocus: -1
     });
+    this.props.onChange({ target: { name: this.props.name, value: clicked } });
   };
 
   getItem = (val, index) => {
@@ -128,13 +132,13 @@ class AutoComplete extends Component {
   onBlur = e => {};
 
   render() {
-    const { filterItems, ...thinProps } = this.props;
+    const { onKeyDown, onChange, ...thinProps } = this.props;
     return (
       <div className="auto-complete-wrapper">
-        <input
-          type="text"
-          onKeyDown={this.onKeyDown}
+        <TextInput
           className="ac-input"
+          onKeyDown={this.onKeyDown}
+          onChange={this.onChange}
           {...thinProps}
         />
         <div className="auto-complete-items-container">{this.getItems()}</div>
