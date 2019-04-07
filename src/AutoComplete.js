@@ -83,6 +83,9 @@ class AutoComplete extends Component {
       case 13:
         if (currentFocus > -1) {
           const selectedValue = this.state.matches[currentFocus];
+          this.props.onChange({
+            target: { name: this.props.name, value: selectedValue }
+          });
           this.setState({
             searchTerm: selectedValue,
             matches: [],
