@@ -232,6 +232,7 @@ const itemsTest = ["axxx", "ayyy", "xxxa", "bzxxtxx"];
 
 class App extends Component {
   testTextInputRef = React.createRef();
+  testAcRef = React.createRef();
 
   state = {
     testTextInput: "",
@@ -265,7 +266,8 @@ class App extends Component {
   };
 
   render() {
-    console.log(<TextInput />);
+    if (this.testAcRef.current) this.testAcRef.current.focus();
+    //console.log("acRef", this.testAcRef.current.focus());
     return (
       <div>
         <h2>Validatable controls examples</h2>
@@ -292,6 +294,7 @@ class App extends Component {
             submitted={this.props.submitted}
             onChange={this.onChange}
             items={countries}
+            ref={this.testAcRef}
           />
         </div>
         {/* <div className="demo">

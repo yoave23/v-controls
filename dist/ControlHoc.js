@@ -41,18 +41,15 @@ function controlHoc(WrappedControl) {
 
       return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ControlHoc.__proto__ || Object.getPrototypeOf(ControlHoc)).call.apply(_ref, [this].concat(args))), _this), _this.controlRef = _react2.default.createRef(), _this.state = {
         blurred: "",
-        errorMessage: ""
-      }, _this.getErrorMessage = function () {
-        if (_this.state.blurred || _this.props.submitted) {
-          return _this.state.errorMessage;
-        }
-        return "";
+        validationMessage: ""
+      }, _this.getValidationMessage = function () {
+        return _this.state.blurred || _this.props.submitted ? _this.state.validationMessage : null;
       }, _this.onChange = function (e) {
         e.persist();
         if (_this.props.onChange) {
           _this.props.onChange(e);
         }
-        _this.validate(e.target.value);
+        _this.validate();
       }, _this.onBlur = function (e) {
         e.persist();
         if (_this.props.onBlur) {
@@ -60,31 +57,40 @@ function controlHoc(WrappedControl) {
         }
 
         _this.setState({ blurred: true }, function () {
-          _this.validate(e.target.value);
+          _this.validate();
         });
-      }, _this.validate = function (value) {
-        if (!_this.props.validationRules) {
-          return;
+      }, _this.validate = function () {
+        var validationMessage = "";
+        var innerRef = null; // = this.props.innerRef.current || this.inputRef.current;
+        if (_this.props.controlRef) {
+          innerRef = _this.props.controlRef.current;
+        } else {
+          innerRef = _this.controlRef.current;
         }
-        var tempMessage = "";
-        _this.props.validationRules.forEach(function (rule) {
-          var message = rule(value);
-          if (message) {
-            tempMessage = message;
-            return;
+
+        if (!innerRef.validity.valid) {
+          if (innerRef.validity.valueMissing) {
+            validationMessage = "this field is required";
           }
-        });
-        _this.setState({ errorMessage: tempMessage }, function () {
-          _this.props.onValidityChanged(_this.props.name, _this.state.errorMessage);
-        });
+        }
+
+        if (!validationMessage && _this.props.customValidations) {
+          _this.props.customValidations.forEach(function (val) {
+            validationMessage = val(innerRef.value, _this.props.name);
+          });
+        }
+
+        _this.validationMessage = validationMessage;
+        console.log("validationMessage", validationMessage);
+        _this.setState({ validationMessage: validationMessage });
+        _this.props.onValidityChanged(_this.props.name, validationMessage);
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
-    // strip down props used internally (we'll call them later if needed)
 
     _createClass(ControlHoc, [{
       key: "componentDidMount",
       value: function componentDidMount() {
-        this.validate(this.props.value || "");
+        this.validate();
       }
     }, {
       key: "componentWillUnmount",
@@ -94,28 +100,22 @@ function controlHoc(WrappedControl) {
     }, {
       key: "render",
       value: function render() {
-        //const { forwardedRef } = this.props;
-        console.log("hoc props", this.props);
-
         var _props = this.props,
-            onChange = _props.onChange,
             submitted = _props.submitted,
-            validationRules = _props.validationRules,
-            onValidityChanged = _props.onValidityChanged,
-            getErrorMessage = _props.getErrorMessage,
-            validate = _props.validate,
-            reservedProps = _props.reservedProps,
-            getThinProps = _props.getThinProps,
             customValidations = _props.customValidations,
-            thinProps = _objectWithoutProperties(_props, ["onChange", "submitted", "validationRules", "onValidityChanged", "getErrorMessage", "validate", "reservedProps", "getThinProps", "customValidations"]);
-
-        console.log("hoc thinProps", this.props);
-        console.log("hoc thinProps", thinProps);
+            onValidityChanged = _props.onValidityChanged,
+            onBlur = _props.onBlur,
+            onChange = _props.onChange,
+            innerRef = _props.innerRef,
+            filterItems = _props.filterItems,
+            thinProps = _objectWithoutProperties(_props, ["submitted", "customValidations", "onValidityChanged", "onBlur", "onChange", "innerRef", "filterItems"]);
 
         return _react2.default.createElement(WrappedControl, _extends({
+          getValidationMessage: this.getValidationMessage,
           onChange: this.onChange,
           onBlur: this.onBlur,
-          validate: this.validate
+          validate: this.validate,
+          ref: this.props.controlRef || this.controlRef
         }, thinProps));
       }
     }]);
@@ -123,7 +123,7 @@ function controlHoc(WrappedControl) {
     return ControlHoc;
   }(_react.Component);
 
-  return _react2.default.forwardRef(function (props) {
-    return _react2.default.createElement(ControlHoc, props);
+  return _react2.default.forwardRef(function (props, ref) {
+    return _react2.default.createElement(ControlHoc, _extends({ controlRef: ref }, props));
   });
 }
