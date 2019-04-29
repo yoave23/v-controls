@@ -155,6 +155,9 @@ var AutoComplete = function (_Component) {
         case 13:
           if (currentFocus > -1) {
             var selectedValue = _this.state.matches[currentFocus];
+            _this.props.onChange({
+              target: { name: _this.props.name, value: selectedValue }
+            });
             _this.setState({
               searchTerm: selectedValue,
               matches: [],

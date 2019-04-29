@@ -49,18 +49,21 @@ var TextInput = function (_PureComponent) {
         _this.props.onBlur(e);
       }
 
-      if (!_this.state.blurred) {
-        _this.setState({ blurred: true }, function () {
-          _this.validate();
-        });
+      if (!_this.props.noValidate) {
+        if (!_this.state.blurred) {
+          _this.setState({ blurred: true }, function () {
+            _this.validate();
+          });
+        }
       }
     }, _this.onChange = function (e) {
       e.persist();
       if (_this.props.onChange) {
         _this.props.onChange(e);
       }
-
-      _this.validate();
+      if (!_this.props.noValidate) {
+        _this.validate();
+      }
     }, _this.validate = function () {
       var validationMessage = "";
       var innerRef = null; // = this.props.innerRef.current || this.inputRef.current;
@@ -86,14 +89,16 @@ var TextInput = function (_PureComponent) {
       _this.setState({ validationMessage: validationMessage });
       _this.props.onValidityChanged(_this.props.name, validationMessage);
     }, _this.getValidationMessage = function () {
-      return _this.state.blurred || _this.props.submitted ? _this.state.validationMessage : null;
+      if (!_this.props.noValidate) return _this.state.blurred || _this.props.submitted ? _this.state.validationMessage : null;
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(TextInput, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.validate();
+      if (!this.props.noValidate) {
+        this.validate();
+      }
     }
   }, {
     key: "render",
@@ -117,7 +122,7 @@ var TextInput = function (_PureComponent) {
           onBlur: this.onBlur,
           onChange: this.onChange
         }, thinProps)),
-        _react2.default.createElement(
+        this.props.noValidate ? null : _react2.default.createElement(
           "div",
           { className: "validation-message" },
           this.getValidationMessage()

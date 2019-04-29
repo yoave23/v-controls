@@ -10,7 +10,9 @@ class TextInput extends PureComponent {
   };
 
   componentDidMount() {
-    this.validate();
+    if (!this.props.noValidate) {
+      this.validate();
+    }
   }
 
   getId = () => {
@@ -23,10 +25,12 @@ class TextInput extends PureComponent {
       this.props.onBlur(e);
     }
 
-    if (!this.state.blurred) {
-      this.setState({ blurred: true }, () => {
-        this.validate();
-      });
+    if (!this.props.noValidate) {
+      if (!this.state.blurred) {
+        this.setState({ blurred: true }, () => {
+          this.validate();
+        });
+      }
     }
   };
 
@@ -35,8 +39,9 @@ class TextInput extends PureComponent {
     if (this.props.onChange) {
       this.props.onChange(e);
     }
-
-    this.validate();
+    if (!this.props.noValidate) {
+      this.validate();
+    }
   };
 
   validate = () => {
@@ -66,9 +71,10 @@ class TextInput extends PureComponent {
   };
 
   getValidationMessage = () => {
-    return this.state.blurred || this.props.submitted
-      ? this.state.validationMessage
-      : null;
+    if (!this.props.noValidate)
+      return this.state.blurred || this.props.submitted
+        ? this.state.validationMessage
+        : null;
   };
 
   render() {
@@ -92,7 +98,11 @@ class TextInput extends PureComponent {
           onChange={this.onChange}
           {...thinProps}
         />
-        <div className="validation-message">{this.getValidationMessage()}</div>
+        {this.props.noValidate ? null : (
+          <div className="validation-message">
+            {this.getValidationMessage()}
+          </div>
+        )}
       </React.Fragment>
     );
   }
