@@ -18,6 +18,10 @@ var _AutoCompleteItem = require("./AutoCompleteItem");
 
 var _AutoCompleteItem2 = _interopRequireDefault(_AutoCompleteItem);
 
+var _TextInput = require("./TextInput");
+
+var _TextInput2 = _interopRequireDefault(_TextInput);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
@@ -54,18 +58,20 @@ var AutoComplete = function (_Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 e.persist();
+                _this.props.onChange(e);
                 value = e.target.value;
-                _context.next = 4;
+                _context.next = 5;
                 return _this.filterItems(value);
 
-              case 4:
+              case 5:
                 matches = _context.sent;
 
-                _this.setState({ searchTerm: value, matches: matches }, function () {
-                  _this.props.onChange(e);
-                });
+                // console.group("in autoComplete onChange");
+                // console.log({ value });
+                // console.groupEnd();
+                _this.setState({ searchTerm: value, matches: matches }, function () {});
 
-              case 6:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -154,6 +160,9 @@ var AutoComplete = function (_Component) {
               matches: [],
               currentFocus: -1
             });
+            _this.props.onChange({
+              target: { name: _this.props.name, value: selectedValue }
+            });
           }
           break;
         case 9:
@@ -176,6 +185,7 @@ var AutoComplete = function (_Component) {
         matches: [],
         currentFocus: -1
       });
+      _this.props.onChange({ target: { name: _this.props.name, value: clicked } });
     };
 
     _this.getItem = function (val, index) {
@@ -197,14 +207,25 @@ var AutoComplete = function (_Component) {
     _this.onBlur = function (e) {};
 
     _this.clickEvent = document.addEventListener("click", function (e) {
-      if (!e.target.parentElement) {
-        return;
+      //console.log("classList", e.target.classList);
+      if (!e.target.classList.contains("autocomplete-item")) {
+        _this.setState({ matches: [] });
       }
-      var parentClassList = e.target.parentElement.classList;
+      // if (!e.target.parentElement) {
+      //   return;
+      // }
+      // const parentClassList = e.target.parentElement.classList;
 
-      var test1 = parentClassList.contains("auto-complete-items-container");
-      var test2 = parentClassList.contains("auto-complete-wrapper");
-      if (!test1 && !test2) {
+      // const test1 = parentClassList.contains("auto-complete-items-container");
+      // const test2 = parentClassList.contains("auto-complete-wrapper");
+      // if (!test1 && !test2) {
+      //   this.setState({ matches: [] });
+      // }
+    });
+
+    _this.keyPressEvent = document.addEventListener("keydown", function (e) {
+      console.log(e.keyCode);
+      if (e.keyCode === 27) {
         _this.setState({ matches: [] });
       }
     });
@@ -215,27 +236,30 @@ var AutoComplete = function (_Component) {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       document.removeEventListener("click", this.clickEvent);
+      document.removeEventListener("keydown", this.keyPressEvent);
     }
   }, {
     key: "render",
     value: function render() {
       var _props = this.props,
-          filterItems = _props.filterItems,
-          thinProps = _objectWithoutProperties(_props, ["filterItems"]);
+          onKeyDown = _props.onKeyDown,
+          onChange = _props.onChange,
+          thinProps = _objectWithoutProperties(_props, ["onKeyDown", "onChange"]);
 
       return _react2.default.createElement(
         "div",
         { className: "auto-complete-wrapper" },
-        _react2.default.createElement("input", _extends({
-          type: "text",
+        _react2.default.createElement(_TextInput2.default, _extends({
+          ref: this.props.innerRef,
+          className: "ac-input",
           onKeyDown: this.onKeyDown,
-          className: "ac-input"
+          onChange: this.onChange
         }, thinProps)),
-        _react2.default.createElement(
+        this.state.matches && this.state.matches.length > 0 ? _react2.default.createElement(
           "div",
           { className: "auto-complete-items-container" },
           this.getItems()
-        )
+        ) : null
       );
     }
   }]);
@@ -243,4 +267,9 @@ var AutoComplete = function (_Component) {
   return AutoComplete;
 }(_react.Component);
 
-exports.default = AutoComplete;
+//export default AutoComplete;
+
+
+exports.default = _react2.default.forwardRef(function (props, ref) {
+  return _react2.default.createElement(AutoComplete, _extends({ innerRef: ref }, props));
+});

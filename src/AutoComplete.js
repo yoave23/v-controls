@@ -7,14 +7,25 @@ class AutoComplete extends Component {
   constructor() {
     super();
     this.clickEvent = document.addEventListener("click", e => {
-      if (!e.target.parentElement) {
-        return;
+      //console.log("classList", e.target.classList);
+      if (!e.target.classList.contains("autocomplete-item")) {
+        this.setState({ matches: [] });
       }
-      const parentClassList = e.target.parentElement.classList;
+      // if (!e.target.parentElement) {
+      //   return;
+      // }
+      // const parentClassList = e.target.parentElement.classList;
 
-      const test1 = parentClassList.contains("auto-complete-items-container");
-      const test2 = parentClassList.contains("auto-complete-wrapper");
-      if (!test1 && !test2) {
+      // const test1 = parentClassList.contains("auto-complete-items-container");
+      // const test2 = parentClassList.contains("auto-complete-wrapper");
+      // if (!test1 && !test2) {
+      //   this.setState({ matches: [] });
+      // }
+    });
+
+    this.keyPressEvent = document.addEventListener("keydown", e => {
+      console.log(e.keyCode);
+      if (e.keyCode === 27) {
         this.setState({ matches: [] });
       }
     });
@@ -28,6 +39,7 @@ class AutoComplete extends Component {
 
   componentWillUnmount() {
     document.removeEventListener("click", this.clickEvent);
+    document.removeEventListener("keydown", this.keyPressEvent);
   }
 
   onChange = async e => {
@@ -91,6 +103,9 @@ class AutoComplete extends Component {
             matches: [],
             currentFocus: -1
           });
+          this.props.onChange({
+            target: { name: this.props.name, value: selectedValue }
+          });
         }
         break;
       case 9:
@@ -139,15 +154,21 @@ class AutoComplete extends Component {
     return (
       <div className="auto-complete-wrapper">
         <TextInput
+          ref={this.props.innerRef}
           className="ac-input"
           onKeyDown={this.onKeyDown}
           onChange={this.onChange}
           {...thinProps}
         />
-        <div className="auto-complete-items-container">{this.getItems()}</div>
+        {this.state.matches && this.state.matches.length > 0 ? (
+          <div className="auto-complete-items-container">{this.getItems()}</div>
+        ) : null}
       </div>
     );
   }
 }
 
-export default AutoComplete;
+//export default AutoComplete;
+export default React.forwardRef((props, ref) => (
+  <AutoComplete innerRef={ref} {...props} />
+));
