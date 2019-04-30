@@ -81,7 +81,7 @@ function controlHoc(WrappedControl) {
         }
 
         _this.validationMessage = validationMessage;
-        console.log("validationMessage", validationMessage);
+        //console.log("validationMessage", validationMessage);
         _this.setState({ validationMessage: validationMessage });
         _this.props.onValidityChanged(_this.props.name, validationMessage);
       }, _temp), _possibleConstructorReturn(_this, _ret);

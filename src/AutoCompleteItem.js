@@ -17,7 +17,7 @@ class AutoCompleteItem extends Component {
   };
 
   onClick = e => {
-    console.log(`item '${this.props.value}' was clicked`);
+    //console.log(`item '${this.props.value}' was clicked`);
     this.props.onItemClick(this.props.index);
   };
 

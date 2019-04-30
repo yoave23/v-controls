@@ -64,7 +64,7 @@ export function controlHoc(WrappedControl) {
       }
 
       this.validationMessage = validationMessage;
-      console.log("validationMessage", validationMessage);
+      //console.log("validationMessage", validationMessage);
       this.setState({ validationMessage });
       this.props.onValidityChanged(this.props.name, validationMessage);
     };

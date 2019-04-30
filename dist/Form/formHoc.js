@@ -41,7 +41,7 @@ var formHoc = function formHoc(WrappedComponent) {
       }, _this.setSubmitted = function () {
         _this.setState({ submitted: true });
       }, _this.onValidityChanged = function (name, validationMessage) {
-        console.log("onValidityChanged called", name, validationMessage);
+        //console.log("onValidityChanged called", name, validationMessage);
         var temp = _extends({}, _this.state.validationState);
         temp[name] = validationMessage;
         _this.setState({ validationState: temp });
@@ -49,7 +49,7 @@ var formHoc = function formHoc(WrappedComponent) {
         var isFormValid = Object.keys(_this.state.validationState).filter(function (item) {
           return !!_this.state.validationState[item];
         }).length === 0;
-        console.log("isFormValid", isFormValid);
+        //console.log("isFormValid", isFormValid);
         return isFormValid;
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }

@@ -12,7 +12,7 @@ const formHoc = WrappedComponent => {
     };
 
     onValidityChanged = (name, validationMessage) => {
-      console.log("onValidityChanged called", name, validationMessage);
+      //console.log("onValidityChanged called", name, validationMessage);
       let temp = { ...this.state.validationState };
       temp[name] = validationMessage;
       this.setState({ validationState: temp });
@@ -23,7 +23,7 @@ const formHoc = WrappedComponent => {
         Object.keys(this.state.validationState).filter(
           item => !!this.state.validationState[item]
         ).length === 0;
-      console.log("isFormValid", isFormValid);
+      //console.log("isFormValid", isFormValid);
       return isFormValid;
     };
 

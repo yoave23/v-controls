@@ -37,7 +37,7 @@ var AutoCompleteItem = function (_Component) {
     };
 
     _this.onClick = function (e) {
-      console.log("item '" + _this.props.value + "' was clicked");
+      //console.log(`item '${this.props.value}' was clicked`);
       _this.props.onItemClick(_this.props.index);
     };
 

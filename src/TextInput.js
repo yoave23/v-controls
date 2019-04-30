@@ -65,9 +65,10 @@ class TextInput extends PureComponent {
     }
 
     this.validationMessage = validationMessage;
-    console.log("validationMessage", validationMessage);
+    //console.log("validationMessage", validationMessage);
     this.setState({ validationMessage });
-    this.props.onValidityChanged(this.props.name, validationMessage);
+    if (!this.props.noValidate)
+      this.props.onValidityChanged(this.props.name, validationMessage);
   };
 
   getValidationMessage = () => {

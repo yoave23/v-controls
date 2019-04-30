@@ -24,7 +24,7 @@ class AutoComplete extends Component {
     });
 
     this.keyPressEvent = document.addEventListener("keydown", e => {
-      console.log(e.keyCode);
+      //console.log(e.keyCode);
       if (e.keyCode === 27) {
         this.setState({ matches: [] });
       }
